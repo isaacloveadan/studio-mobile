@@ -43,8 +43,23 @@
 				menuListData: [],
 				 swiperOption:{
 				 	notNextTick: true,
-					loop : true,
-					autoplay: 5000
+					loop : false,
+					// 每次幻灯执行这个函数 动态改变全局的menu变量 是的菜单每个栏的样式动态改变
+					onSlideChangeEnd(swiper){
+						if(swiper.activeIndex==0){
+							console.log(store.getters.getMenuListData)
+							store.commit('setCurrentMenu',store.getters.getMenuListData[0])
+						}else if(swiper.activeIndex==1){
+							console.log(store.getters.getMenuListData)
+							store.commit('setCurrentMenu',store.getters.getMenuListData[1])
+						}else if(swiper.activeIndex==2){
+							console.log(store.getters.getMenuListData)
+							store.commit('setCurrentMenu',store.getters.getMenuListData[2])
+						}else if(swiper.activeIndex==3){
+							console.log(store.getters.getMenuListData)
+							store.commit('setCurrentMenu',store.getters.getMenuListData[3])
+						}
+					}
 				 }
 			}
 
@@ -70,23 +85,18 @@
 				} else {
 					return false
 				}
+			},
+			// 这里拿到swiper对象为后面的点击事件做准备
+			swiper:function(){
+				return this.$refs.mySwiperB.swiper
 			}
 		},
 		methods: {
 			isActive: function(index, itemMenuInfo) {
-
 				store.commit('setCurrentMenu', itemMenuInfo)
-				this.$nextTick(function() {
-					// this.$el.querySelector('.content_box').style.height=document.body.offsetHeight-this.$el.offsetTop-36+'px'
-				})
+				// 这里调用swiper对象 幻灯到当前点击页面
+				this.swiper.slideTo(index,500,true)
 			}
-			// isActive: function(type) {
-			// 	store.commit('setCurrentView',type)
-
-			// 	this.$nextTick(function () {
-			// 		// this.$el.querySelector('.content_box').style.height=document.body.offsetHeight-this.$el.offsetTop-36+'px'
-			// 	})
-			// }
 		},
 		mounted() {
 			var tempArr = this.room.pluginObj.menu.map(function(x) {
@@ -95,8 +105,8 @@
 			})
 			//这里将两个对象连接起来
 			this.menuListData = [{ title: '边看边聊', type: 'communit', isActive: true }].concat(tempArr)
-			console.log(this.menuListData)
-			console.log(this.menuListData.length>0)
+			store.commit('setMenuListData',this.menuListData)
+			console.log(store.getters.getMenuListData)
 			this.$nextTick(function() {
 				//margin-top 10
 				document.querySelector('.content_box').style.height = document.body.offsetHeight - this.$el.offsetTop - 36 + 'px'

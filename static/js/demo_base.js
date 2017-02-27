@@ -78,8 +78,14 @@ function sdkLogin() {
     webim.login(loginInfo, listeners, options,
         function (identifierNick) {
             //identifierNick为登录用户昵称(没有设置时，为帐号)，无登录态时为空
-            webim.Log.info('webim登录成功');
+//          console.log(loginInfo)
+//          console.log(listeners)
+//          console.log(options)
+//          console.log(identifierNick)
+            webim.Log.info('webim登录成功123');
+//          console.log(avChatRoomId)
             applyJoinBigGroup(avChatRoomId);//加入大群
+//          console.log('听说在这里出错了')
             // hideDiscussForm();//隐藏评论表单
             initEmotionUL();//初始化表情
             $('.video-discuss-tool').css('visibility','visible')

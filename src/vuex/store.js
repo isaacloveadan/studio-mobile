@@ -19,7 +19,8 @@ const state = {
     menu:{
         title:"边看边聊",
         type:"communit"
-    }
+    },
+    menuListData:[]
 
 };
 
@@ -32,8 +33,10 @@ const getters = {
     },
     getLoading: function (state) {
         return state.isLoading
+    },
+    getMenuListData:function(state){
+    	return state.menuListData
     }
-
 }
 
 
@@ -62,6 +65,9 @@ const mutations = {
         console.log(state)
 
     },
+    setMenuListData:function(state,obj){
+    	state.menuListData=obj
+    }
 
 }
 
