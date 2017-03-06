@@ -67,8 +67,16 @@
 						load: true
 					}
 					store.commit('setRoom', obj)
-					// 删掉isopenlogin变量 下次登录时 还要经过一次微信跳转
-
+					// 这里访问最新进入直播间接口 目的只是为了拿到heartid 为后面的心跳接口参数
+					var url1='/consumers/room/'+sessionStorage.getItem('roomid')
+					this.$http.get(url1,{}).then((response)=>{
+						console.log(response)
+						sessionStorage.setItem('heartid',response.body.data.heartid)
+						this.heatbeat()
+					},(response)=>{
+						console.log('error')
+						console.log(response)
+					})
 				}, (response) => {
 
 					//this.$router.push('notfound')
@@ -118,7 +126,7 @@
 						}
 						var code = getUrlParam('code')
 						this.$http.post('/deal/wxlogin', { code: code }).then((response) => {
-							// alert(response.body)
+							console.log(response.body)
 							if(response.body.code != 100) {
 								//this.$router.push('notfound')
 								alert(JSON.stringify(response.body))
@@ -148,11 +156,20 @@
 
 				//
 
+			},
+			//这里是房间心跳包
+			heatbeat:function(){
+				this.$http.post('/consumers/heartbeat',{roomid:sessionStorage.getItem('roomid'),heartid:sessionStorage.getItem('heartid')}).then((response)=>{
+					console.log('success')
+					console.log(response)
+				},(response)=>{
+					console.log('error')
+					console.log(response)
+				})
 			}
 
 		},
 		mounted() {
-
 			// alert(0)
 			if(isNaN(this.$route.params.id)) {
 				//this.$router.push('notfound')
@@ -161,6 +178,11 @@
 			//			this.getRoomInfo()
 			console.log('开干吧 新地址')
 			this.setUsrInfo()
+			// 这里隔两分钟 心跳包一次
+			var that=this
+			setInterval(function(){
+				that.heatbeat()
+			},120000)
 		}
 	}
 </script>
@@ -172,5 +194,6 @@
 		left: 0;
 		right: 0;
 		bottom: 0;
+		overflow:hidden;
 	}
 </style>

@@ -99,6 +99,9 @@
 					webim.Log.warn('receive a new group msg: ' + msg.getFromAccountNick());
 					//显示收到的消息
 					showMsg(msg);
+					// 有新消息出现 滚动条滚动到底部
+					$('#video_sms_list').scrollTop( $('#video_sms_list')[0].scrollHeight );
+					// alert(1)
 				}
 			}
 
@@ -240,7 +243,11 @@
 				window.loginInfo.identifier = identifier
 				sdkLogin()
 			})
-			$('.video-discuss').height($('.content_box').height())
+			
+			this.$nextTick(function(){
+				$('.video-discuss').height($('.content_box').height())
+				
+			})
 		}
 	}
 </script>

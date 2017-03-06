@@ -99,6 +99,7 @@
 			}
 		},
 		mounted() {
+			
 			var tempArr = this.room.pluginObj.menu.map(function(x) {
 				x.isActive = false
 				return x
@@ -107,15 +108,20 @@
 			this.menuListData = [{ title: '边看边聊', type: 'communit', isActive: true }].concat(tempArr)
 			store.commit('setMenuListData',this.menuListData)
 			console.log(store.getters.getMenuListData)
+			// 在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。
 			this.$nextTick(function() {
-				//margin-top 10
-				document.querySelector('.content_box').style.height = document.body.offsetHeight - this.$el.offsetTop - 36 + 'px'
+			// 	//margin-top 10
+			// 	document.querySelector('.content_box').style.height = document.body.offsetHeight - this.$el.offsetTop - 36 + 'px'
+				$('.content_box').height($('body').height()-$('.content_box').offset().top-10)		
+				$('.swiper-slide').height($('.content_box').height())
 			})
-
 		}
 	}
 </script>
 
 <style lang="less">
-
+	.swiper-slide{
+		overflow:hidden;
+		overflow-y:scroll;
+	}
 </style>
